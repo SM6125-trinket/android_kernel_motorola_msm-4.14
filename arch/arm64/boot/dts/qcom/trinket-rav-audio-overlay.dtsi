@@ -374,6 +374,7 @@
 		"RX_TX DEC3_INP", "TX DEC3 MUX";
 	qcom,wsa-max-devs = <0>;
 	qcom,ext-disp-audio-rx = <0>;
+	qcom,wcn-btfm = <0>;
 	ti,2558-max-devs = <2>;
 };
 

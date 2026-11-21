@@ -141,6 +141,14 @@
 	};
 };
 
+&pm8008_8 {
+	status = "disabled";
+};
+
+&pm8008_9 {
+	status = "disabled";
+};
+
 &thermal_zones {
 	rf-pa0-therm-adc {
 		status = "disabled";
