@@ -3676,6 +3676,7 @@ static enum power_supply_property batt_props[] = {
 	POWER_SUPPLY_PROP_CYCLE_COUNT,
 	POWER_SUPPLY_PROP_RECHARGE_SOC,
 	POWER_SUPPLY_PROP_CHARGE_FULL,
+	POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN,
 	POWER_SUPPLY_PROP_FCC_STEPPER_ENABLE,
 	POWER_SUPPLY_PROP_HOT_TEMP,
 };
@@ -3703,6 +3704,13 @@ static int batt_get_prop(struct power_supply *psy,
 			val->intval = chip->last_reported_soc;
 		break;
 	case POWER_SUPPLY_PROP_CYCLE_COUNT:
+		/* Prefer hardware QG SDAM cycle count when available; Moto RAM counter resets on boot */
+		if (chip->bms_psy) {
+			rc = power_supply_get_property(chip->bms_psy, psp, val);
+			if (rc >= 0 && val->intval >= 0)
+				break;
+			rc = 0;
+		}
 		val->intval = chip->cycles / 100;
 		break;
 	case POWER_SUPPLY_PROP_HEALTH:
