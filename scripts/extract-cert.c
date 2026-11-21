@@ -21,7 +21,9 @@
 #include <openssl/bio.h>
 #include <openssl/pem.h>
 #include <openssl/err.h>
+#ifndef OPENSSL_NO_ENGINE
 #include <openssl/engine.h>
+#endif
 
 #define PKEY_ID_PKCS7 2
 
@@ -112,6 +114,7 @@ int main(int argc, char **argv)
 		fclose(f);
 		exit(0);
 	} else if (!strncmp(cert_src, "pkcs11:", 7)) {
+#ifndef OPENSSL_NO_ENGINE
 		ENGINE *e;
 		struct {
 			const char *cert_id;
@@ -134,6 +137,9 @@ int main(int argc, char **argv)
 		ENGINE_ctrl_cmd(e, "LOAD_CERT_CTRL", 0, &parms, NULL, 1);
 		ERR(!parms.cert, "Get X.509 from PKCS#11");
 		write_cert(parms.cert);
+#else
+		ERR(1, "PKCS#11 ENGINE support unavailable in OpenSSL");
+#endif
 	} else {
 		BIO *b;
 		X509 *x509;
