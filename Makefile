@@ -804,6 +804,7 @@ LDFLAGS += -O2
 endif
 
 KBUILD_CFLAGS += $(call cc-disable-warning, unused-const-variable)
+KBUILD_CFLAGS += $(call cc-disable-warning, unused-but-set-variable)
 ifdef CONFIG_FRAME_POINTER
 KBUILD_CFLAGS	+= -fno-omit-frame-pointer -fno-optimize-sibling-calls
 else
@@ -832,6 +833,7 @@ KBUILD_CFLAGS	+= -g
 endif
 ifneq ($(LLVM_IAS),1)
 KBUILD_AFLAGS	+= -Wa,-gdwarf-2
+KBUILD_CFLAGS	+= $(call cc-option, -gdwarf-4,)
 endif
 endif
 
